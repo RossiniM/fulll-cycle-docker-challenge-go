@@ -1,16 +1,18 @@
 FROM golang:latest as go
 
-WORKDIR /golang
+COPY . /go/src
 
-RUN git clone https://github.com/golang/example &&\
-   cd example/hello &&\
+RUN cd src &&\
+   go mod init hello &&\
+    unset GOPATH &&\
     go build
 
- FROM busybox as linux
- WORKDIR /example
+FROM busybox as linux
 
-COPY --from=go /golang/example/hello/hello .
+WORKDIR /example
+
+COPY --from=go /go/src/hello .
 
 RUN pwd
 
-RUN ./hello
+ENTRYPOINT [ "./hello" ]
