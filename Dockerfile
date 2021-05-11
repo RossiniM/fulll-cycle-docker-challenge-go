@@ -7,12 +7,10 @@ RUN cd src &&\
     unset GOPATH &&\
     go build
 
-FROM busybox as linux
+FROM scratch as linux
 
 WORKDIR /example
 
 COPY --from=go /go/src/hello .
-
-RUN pwd
 
 ENTRYPOINT [ "./hello" ]
